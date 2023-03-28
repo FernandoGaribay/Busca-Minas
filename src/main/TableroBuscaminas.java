@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -61,26 +62,17 @@ public class TableroBuscaminas {
     }
 
     private List<Casilla> obtenerCasillasAlrrededor(int posFila, int posColumna) {
-        List<Casilla> listaCasillas = new LinkedList<>();
-        for (int i = 0; i < 8; i++) {
-            int tmpPosFila = posFila;
-            int tmpPosColumna = posColumna;
-            switch (i) {
-                case 0: tmpPosFila--; break;                    //Arriba
-                case 1: tmpPosFila--; tmpPosColumna++; break;   //Arriba Derecha
-                case 2: tmpPosColumna++;  break;                //Derecha
-                case 3: tmpPosFila++; tmpPosColumna++; break;   //Abajo Derecha  
-                case 4: tmpPosFila++; break;                    //Abajo 
-                case 5: tmpPosFila++; tmpPosColumna--; break;   //Abajo Izquierda
-                case 6: tmpPosColumna--; break;                 //Izquierda
-                case 7: tmpPosFila--; tmpPosColumna--; break;   //Arriba Izquierda 
-            }
-            if (tmpPosFila >= 0 && tmpPosFila < this.casillas.length
-                    && tmpPosColumna >= 0 && tmpPosColumna < this.casillas[0].length) {
-                listaCasillas.add(this.casillas[tmpPosFila][tmpPosColumna]);
+        int filas = casillas.length;
+        int columnas = casillas[0].length;
+        List<Casilla> adyacentes = new LinkedList<>();
+        for (int i = Math.max(0, posFila - 1); i < Math.min(posFila + 2, filas); i++) {
+            for (int j = Math.max(0, posColumna - 1); j < Math.min(posColumna + 2, columnas); j++) {
+                if (i != posFila || j != posColumna) {
+                    adyacentes.add(casillas[i][j]);
+                }
             }
         }
-        return listaCasillas;
+        return adyacentes;
     }
 
     private List<Casilla> obtenerCasillasConMinas() {

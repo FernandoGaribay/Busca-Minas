@@ -1,11 +1,9 @@
 package main;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 
 public class FrmJuego extends javax.swing.JFrame {
@@ -22,9 +20,9 @@ public class FrmJuego extends javax.swing.JFrame {
 
     private void descargarControles() {
         if (this.botonesTablero != null) {
-            for (int i = 0; i < botonesTablero.length; i++) {
-                for (int j = 0; j < botonesTablero[i].length; j++) {
-                    this.getContentPane().remove(botonesTablero[i][j]);
+            for (JButtomCustom[] filas : botonesTablero) {
+                for (JButtomCustom filaColumna : filas) {
+                    this.getContentPane().remove(filaColumna);
                 }
             }
         }
@@ -39,43 +37,32 @@ public class FrmJuego extends javax.swing.JFrame {
 
     private void crearTableroBuscaminas() {
         this.tableroBuscaminas = new TableroBuscaminas(numFilas, numColumnas, numMinas);
-        this.tableroBuscaminas.setEventoPartidaPerdida(new Consumer<List<Casilla>>() {
-            @Override
-            public void accept(List<Casilla> t) {
-                for (Casilla casillaConMina : t) {
-                    botonesTablero[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].bomba();
-                }
-            }
-        });
-
-        tableroBuscaminas.setEventoCasillaAbierta(new Consumer<Casilla>() {
-            @Override
-            public void accept(Casilla t) {
-                botonesTablero[t.getPosFila()][t.getPosColumna()].revelar();
-                botonesTablero[t.getPosFila()][t.getPosColumna()].setNumber(t.getNumMinasAlrrededor() == 0 ? "" : t.getNumMinasAlrrededor() + "");
-            }
-        });
-
-        tableroBuscaminas.setEventoPartidaGanada(new Consumer<List<Casilla>>() {
-            @Override
-            public void accept(List<Casilla> t) {
-                for (Casilla casillaConMina : t) {
-                    botonesTablero[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].setText(":)");
-                }
+        
+        this.tableroBuscaminas.setEventoPartidaPerdida((List<Casilla> t) -> {
+            for (Casilla casillaConMina : t) {
+                botonesTablero[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].bomba();
             }
         });
         
-        tableroBuscaminas.setEventoMarcarBandera(new Consumer<Casilla>() {
-            @Override
-            public void accept(Casilla t) {
-                if(!t.isBandera()){
-                    botonesTablero[t.getPosFila()][t.getPosColumna()].bandera();
-                } else {
-                    botonesTablero[t.getPosFila()][t.getPosColumna()].normal();
-                }
-
+        tableroBuscaminas.setEventoCasillaAbierta((Casilla t) -> {
+            botonesTablero[t.getPosFila()][t.getPosColumna()].revelar();
+            botonesTablero[t.getPosFila()][t.getPosColumna()].setNumber(t.getNumMinasAlrrededor() == 0 ? "" : t.getNumMinasAlrrededor() + "");
+        });
+        
+        tableroBuscaminas.setEventoPartidaGanada((List<Casilla> t) -> {
+            for (Casilla casillaConMina : t) {
+                botonesTablero[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].setText(":)");
             }
         });
+        
+        tableroBuscaminas.setEventoMarcarBandera((Casilla t) -> {
+            if(!t.isBandera()){
+                botonesTablero[t.getPosFila()][t.getPosColumna()].bandera();
+            } else {
+                botonesTablero[t.getPosFila()][t.getPosColumna()].normal();
+            }
+        });
+        
         this.tableroBuscaminas.imprimirTablero();
     }
 
@@ -102,11 +89,8 @@ public class FrmJuego extends javax.swing.JFrame {
                             anchoControl, altoControl);
                 }
                 
-                botonesTablero[i][j].addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        btnClickIzquierdo((JButtomCustom) e.getSource());
-                    }
+                botonesTablero[i][j].addActionListener((ActionEvent e) -> {
+                    btnClickIzquierdo((JButtomCustom) e.getSource());
                 });
                 botonesTablero[i][j].addMouseListener(new MouseAdapter() {
                     @Override
@@ -155,7 +139,6 @@ public class FrmJuego extends javax.swing.JFrame {
         btnIntermedio = new javax.swing.JMenuItem();
         btnExperto = new javax.swing.JMenuItem();
         btnPersonalizado = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -195,9 +178,6 @@ public class FrmJuego extends javax.swing.JFrame {
         btnNuevoJuego.add(btnPersonalizado);
 
         jMenuBar1.add(btnNuevoJuego);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -279,7 +259,6 @@ public class FrmJuego extends javax.swing.JFrame {
     private javax.swing.JMenu btnNuevoJuego;
     private javax.swing.JMenuItem btnPersonalizado;
     private javax.swing.JMenuItem btnPrincipiante;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 

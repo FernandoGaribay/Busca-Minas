@@ -85,10 +85,10 @@ public class TableroBuscaminas {
 
     private List<Casilla> obtenerCasillasConMinas() {
         List<Casilla> casillasConMinas = new LinkedList<>();
-        for (int i = 0; i < this.casillas.length; i++) {
-            for (int j = 0; j < this.casillas[i].length; j++) {
-                if (this.casillas[i][j].isMina()) {
-                    casillasConMinas.add(casillas[i][j]);
+        for (Casilla[] fila : this.casillas) {
+            for (Casilla filaColumna : fila) {
+                if (filaColumna.isMina()) {
+                    casillasConMinas.add(filaColumna);
                 }
             }
         }
@@ -165,18 +165,18 @@ public class TableroBuscaminas {
     }
 
     public void imprimirTablero() {
-        for (int i = 0; i < this.casillas.length; i++) {
-            for (int j = 0; j < this.casillas[i].length; j++) {
-                System.out.print(this.casillas[i][j].isMina() ? "*" : "0");
+        for (Casilla[] fila : this.casillas) {
+            for (Casilla filaColumna : fila) {
+                System.out.print(filaColumna.isMina() ? "*" : "0");
             }
             System.out.println("");
         }
     }
 
     private void imprimirPistas() {
-        for (int i = 0; i < this.casillas.length; i++) {
-            for (int j = 0; j < this.casillas[i].length; j++) {
-                System.out.print(this.casillas[i][j].getNumMinasAlrrededor());
+        for (Casilla[] fila : this.casillas) {
+            for (Casilla filaColumna : fila) {
+                System.out.print(filaColumna.getNumMinasAlrrededor());
             }
             System.out.println("");
         }

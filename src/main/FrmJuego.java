@@ -67,26 +67,15 @@ public class FrmJuego extends javax.swing.JFrame {
     }
 
     private void cargarControles() {
-        int posXReferencia = 25;
-        int posYReferencia = 25;
-        int anchoControl = 30;
-        int altoControl = 30;
+        int tamano = 30;
+        int margen = 5;
 
         this.botonesTablero = new JButtomCustom[this.numFilas][this.numColumnas];
         for (int i = 0; i < botonesTablero.length; i++) {
             for (int j = 0; j < botonesTablero[i].length; j++) {
                 botonesTablero[i][j] = new JButtomCustom();
                 botonesTablero[i][j].setName(i + "," + j);
-                if (i == 0 && j == 0) {
-                    botonesTablero[i][j].setBounds(posXReferencia, posYReferencia, anchoControl, altoControl);
-                } else if (i == 0 && j != 0) {
-                    botonesTablero[i][j].setBounds(botonesTablero[i][j - 1].getX() + botonesTablero[i][j - 1].getWidth() + 5, 
-                            posYReferencia, anchoControl, altoControl);
-                } else {
-                    botonesTablero[i][j].setBounds(botonesTablero[i - 1][j].getX(), 
-                            botonesTablero[i - 1][j].getY() + botonesTablero[i - 1][j].getHeight() + 5, 
-                            anchoControl, altoControl);
-                }
+                botonesTablero[i][j].setBounds(j * (tamano + margen) + margen, i * (tamano + margen) + margen, tamano, tamano); // Establecer la posicion y el tamaño del boton
                 
                 botonesTablero[i][j].addActionListener((ActionEvent e) -> {
                     btnClickIzquierdo((JButtomCustom) e.getSource());
@@ -102,12 +91,10 @@ public class FrmJuego extends javax.swing.JFrame {
                 getContentPane().add(botonesTablero[i][j]);
             }
         }
-        this.setSize(botonesTablero[numFilas - 1][numColumnas - 1].getX()
-                + botonesTablero[numFilas - 1][numColumnas - 1].getWidth() + 40,
-                botonesTablero[numFilas - 1][numColumnas - 1].getY()
-                + botonesTablero[numFilas - 1][numColumnas - 1].getHeight() + 80
-        );
-
+        
+        int ancho = numColumnas * (tamano + margen) + 21;
+        int alto = numFilas * (tamano + margen) + 65;
+        setSize(ancho, alto);
     }
     
     private int[] obtenerCoordenadas(JButtomCustom boton){

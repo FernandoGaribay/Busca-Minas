@@ -9,11 +9,12 @@ public class JButtomCustom extends JButton {
     
     public JButtomCustom() {
         this.setFocusable(false);
+        this.setBorder(null);
         this.estado = Estado.DEFAULT; // estado por defecto
         dibujar();
     }
 
-    public void setNumber(String number) {
+    public void setNumber(String number) { // Cambiar el color del nombre del boton dependiendo el numero
         switch (number) {
             case "1" -> setForeground(Color.BLUE);
             case "2" -> setForeground(Color.GREEN.darker());
@@ -28,7 +29,7 @@ public class JButtomCustom extends JButton {
     }
 
     private void cambiarEstado(Estado nuevoEstado) {
-        if (estado == Estado.REVEALED) {
+        if (estado == Estado.REVELAR) {
             return; // No se puede cambiar el estado si ya ha sido revelado
         }
         estado = nuevoEstado;
@@ -44,12 +45,12 @@ public class JButtomCustom extends JButton {
                 setFont(new Font("Arial", Font.BOLD, 16));
                 setText("");
                 break;
-            case FLAGGED:
+            case BANDERA:
                 setBackground(Color.LIGHT_GRAY);
                 setForeground(Color.BLACK);
                 setText("F");
                 break;
-            case REVEALED:
+            case REVELAR:
                 setBackground(Color.WHITE);
                 setForeground(getNumberColor());
                 setBorderPainted(false);
@@ -66,11 +67,11 @@ public class JButtomCustom extends JButton {
     }
     
     public void revelar() {
-        cambiarEstado(Estado.REVEALED);
+        cambiarEstado(Estado.REVELAR);
     }
     
     public void bandera(){
-        cambiarEstado(Estado.FLAGGED);
+        cambiarEstado(Estado.BANDERA);
     }
     
     public void bomba(){
@@ -79,35 +80,10 @@ public class JButtomCustom extends JButton {
         
     private enum Estado {
         DEFAULT,
-        FLAGGED,
-        REVEALED,
+        BANDERA,
+        REVELAR,
         BOMBA
     }
-
-    
-
-//    public void setBomb() {
-//        setBackground(Color.RED);
-//        setText("X");
-//    }
-    
-//    public void setRevealed() {
-//        setBackground(Color.WHITE);
-//        setForeground(getNumberColor());
-//        setBorderPainted(false);
-//    }
-
-//    public void setBandera() {
-//        setBackground(Color.LIGHT_GRAY);
-//        setForeground(Color.BLACK);
-//        setText("F");
-//    }
-    
-//    public void removeBandera() {
-//        setBackground(Color.LIGHT_GRAY);
-//        setForeground(Color.BLACK);
-//        setText("");
-//    }
 
     private Color getNumberColor() {
         return getForeground();

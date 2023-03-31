@@ -77,7 +77,6 @@ public class FrmJuego extends javax.swing.JFrame {
             for (int j = 0; j < botonesTablero[i].length; j++) {
                 botonesTablero[i][j] = new JButtomCustom();
                 botonesTablero[i][j].setName(i + "," + j);
-                botonesTablero[i][j].setBorder(null);
                 if (i == 0 && j == 0) {
                     botonesTablero[i][j].setBounds(posXReferencia, posYReferencia, anchoControl, altoControl);
                 } else if (i == 0 && j != 0) {

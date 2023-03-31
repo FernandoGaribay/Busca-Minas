@@ -11,16 +11,18 @@ public class FrmJuego extends javax.swing.JFrame {
     private int numFilas = 10;
     private int numColumnas = 10;
     private int numMinas = 2;
-    private JButtomCustom[][] botonesTablero;
-    private TableroBuscaminas tableroBuscaminas;
+    private int tamanoCasilla = 30;
+    private int margenCasillas = 5;
+    private JButtomCustom[][] casillas;
+    private TableroBuscaminas tablero;
 
     public FrmJuego() {
         initComponents();
     }
 
     private void descargarControles() {
-        if (this.botonesTablero != null) {
-            for (JButtomCustom[] filas : botonesTablero) {
+        if (this.casillas != null) {
+            for (JButtomCustom[] filas : casillas) {
                 for (JButtomCustom filaColumna : filas) {
                     this.getContentPane().remove(filaColumna);
                 }
@@ -31,56 +33,53 @@ public class FrmJuego extends javax.swing.JFrame {
     private void nuevoJuego() {
         descargarControles();
         cargarControles();
-        crearTableroBuscaminas();
+        crearTablero();
         repaint();
     }
 
-    private void crearTableroBuscaminas() {
-        this.tableroBuscaminas = new TableroBuscaminas(numFilas, numColumnas, numMinas);
+    private void crearTablero() {
+        this.tablero = new TableroBuscaminas(numFilas, numColumnas, numMinas);
         
-        this.tableroBuscaminas.setEventoPartidaPerdida((List<Casilla> t) -> {
+        this.tablero.setEventoPartidaPerdida((List<Casilla> t) -> {
             for (Casilla casillaConMina : t) {
-                botonesTablero[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].bomba();
+                casillas[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].bomba();
             }
         });
         
-        tableroBuscaminas.setEventoCasillaAbierta((Casilla t) -> {
-            botonesTablero[t.getPosFila()][t.getPosColumna()].revelar();
-            botonesTablero[t.getPosFila()][t.getPosColumna()].setNumber(t.getNumMinasAlrrededor() == 0 ? "" : t.getNumMinasAlrrededor() + "");
+        tablero.setEventoCasillaAbierta((Casilla t) -> {
+            casillas[t.getPosFila()][t.getPosColumna()].revelar();
+            casillas[t.getPosFila()][t.getPosColumna()].setNumber(t.getNumMinasAlrrededor() == 0 ? "" : t.getNumMinasAlrrededor() + "");
         });
         
-        tableroBuscaminas.setEventoPartidaGanada((List<Casilla> t) -> {
+        tablero.setEventoPartidaGanada((List<Casilla> t) -> {
             for (Casilla casillaConMina : t) {
-                botonesTablero[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].setText(":)");
+                casillas[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].setText(":)");
             }
         });
         
-        tableroBuscaminas.setEventoMarcarBandera((Casilla t) -> {
+        tablero.setEventoMarcarBandera((Casilla t) -> {
             if(!t.isBandera()){
-                botonesTablero[t.getPosFila()][t.getPosColumna()].bandera();
+                casillas[t.getPosFila()][t.getPosColumna()].bandera();
             } else {
-                botonesTablero[t.getPosFila()][t.getPosColumna()].normal();
+                casillas[t.getPosFila()][t.getPosColumna()].normal();
             }
         });
         
-        this.tableroBuscaminas.imprimirTablero();
+        this.tablero.imprimirTablero();
     }
 
     private void cargarControles() {
-        int tamano = 30;
-        int margen = 5;
-
-        this.botonesTablero = new JButtomCustom[this.numFilas][this.numColumnas];
-        for (int i = 0; i < botonesTablero.length; i++) {
-            for (int j = 0; j < botonesTablero[i].length; j++) {
-                botonesTablero[i][j] = new JButtomCustom();
-                botonesTablero[i][j].setName(i + "," + j);
-                botonesTablero[i][j].setBounds(j * (tamano + margen) + margen, i * (tamano + margen) + margen, tamano, tamano); // Establecer la posicion y el tamaño del boton
+        this.casillas = new JButtomCustom[this.numFilas][this.numColumnas];
+        for (int i = 0; i < casillas.length; i++) {
+            for (int j = 0; j < casillas[i].length; j++) {
+                casillas[i][j] = new JButtomCustom();
+                casillas[i][j].setName(i + "," + j);
+                casillas[i][j].setBounds(j * (tamanoCasilla + margenCasillas) + margenCasillas, i * (tamanoCasilla + margenCasillas) + margenCasillas, tamanoCasilla, tamanoCasilla); // Establecer la posicion y el tamaño del boton
                 
-                botonesTablero[i][j].addActionListener((ActionEvent e) -> {
+                casillas[i][j].addActionListener((ActionEvent e) -> {
                     btnClickIzquierdo((JButtomCustom) e.getSource());
                 });
-                botonesTablero[i][j].addMouseListener(new MouseAdapter() {
+                casillas[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (e.getButton() == MouseEvent.BUTTON3) {
@@ -88,12 +87,15 @@ public class FrmJuego extends javax.swing.JFrame {
                         }
                     }
                 });
-                getContentPane().add(botonesTablero[i][j]);
+                getContentPane().add(casillas[i][j]);
             }
         }
-        
-        int ancho = numColumnas * (tamano + margen) + 21;
-        int alto = numFilas * (tamano + margen) + 65;
+        this.tamanoVentana();
+    }
+    
+    private void tamanoVentana(){
+        int ancho = numColumnas * (tamanoCasilla + margenCasillas) + 16 + margenCasillas;
+        int alto = numFilas * (tamanoCasilla + margenCasillas) + 60 + margenCasillas;
         setSize(ancho, alto);
     }
     
@@ -107,12 +109,12 @@ public class FrmJuego extends javax.swing.JFrame {
 
     private void btnClickIzquierdo(JButtomCustom e) {
         int coordenadas[] = obtenerCoordenadas(e);
-        tableroBuscaminas.seleccionarCasilla(coordenadas[0], coordenadas[1]);
+        tablero.seleccionarCasilla(coordenadas[0], coordenadas[1]);
     }
     
     private void btnClickDerecho(JButtomCustom e) {
         int coordenadas[] = obtenerCoordenadas(e);
-        tableroBuscaminas.marcarCasillaBandera(coordenadas[0], coordenadas[1]);
+        tablero.marcarCasillaBandera(coordenadas[0], coordenadas[1]);
     }
 
     @SuppressWarnings("unchecked")
@@ -120,16 +122,19 @@ public class FrmJuego extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
-        btnNuevoJuego = new javax.swing.JMenu();
+        menuNuevoJuego = new javax.swing.JMenu();
         btnPrincipiante = new javax.swing.JMenuItem();
         btnIntermedio = new javax.swing.JMenuItem();
         btnExperto = new javax.swing.JMenuItem();
         btnPersonalizado = new javax.swing.JMenuItem();
+        menuConfiguracion = new javax.swing.JMenu();
+        btnTamano = new javax.swing.JMenuItem();
+        btnMargen = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        btnNuevoJuego.setText("Nuevo Juego");
+        menuNuevoJuego.setText("Nuevo Juego");
 
         btnPrincipiante.setText("Principiante");
         btnPrincipiante.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +142,7 @@ public class FrmJuego extends javax.swing.JFrame {
                 btnPrincipianteActionPerformed(evt);
             }
         });
-        btnNuevoJuego.add(btnPrincipiante);
+        menuNuevoJuego.add(btnPrincipiante);
 
         btnIntermedio.setText("Intermedio");
         btnIntermedio.addActionListener(new java.awt.event.ActionListener() {
@@ -145,7 +150,7 @@ public class FrmJuego extends javax.swing.JFrame {
                 btnIntermedioActionPerformed(evt);
             }
         });
-        btnNuevoJuego.add(btnIntermedio);
+        menuNuevoJuego.add(btnIntermedio);
 
         btnExperto.setText("Experto");
         btnExperto.addActionListener(new java.awt.event.ActionListener() {
@@ -153,7 +158,7 @@ public class FrmJuego extends javax.swing.JFrame {
                 btnExpertoActionPerformed(evt);
             }
         });
-        btnNuevoJuego.add(btnExperto);
+        menuNuevoJuego.add(btnExperto);
 
         btnPersonalizado.setText("Personalizado");
         btnPersonalizado.addActionListener(new java.awt.event.ActionListener() {
@@ -161,9 +166,29 @@ public class FrmJuego extends javax.swing.JFrame {
                 btnPersonalizadoActionPerformed(evt);
             }
         });
-        btnNuevoJuego.add(btnPersonalizado);
+        menuNuevoJuego.add(btnPersonalizado);
 
-        jMenuBar1.add(btnNuevoJuego);
+        jMenuBar1.add(menuNuevoJuego);
+
+        menuConfiguracion.setText("Configuracion");
+
+        btnTamano.setText("Tamaño de las casillas");
+        btnTamano.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTamanoActionPerformed(evt);
+            }
+        });
+        menuConfiguracion.add(btnTamano);
+
+        btnMargen.setText("Marden de las casillas");
+        btnMargen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMargenActionPerformed(evt);
+            }
+        });
+        menuConfiguracion.add(btnMargen);
+
+        jMenuBar1.add(menuConfiguracion);
 
         setJMenuBar(jMenuBar1);
 
@@ -214,6 +239,16 @@ public class FrmJuego extends javax.swing.JFrame {
         this.nuevoJuego();
     }//GEN-LAST:event_btnPersonalizadoActionPerformed
 
+    private void btnTamanoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTamanoActionPerformed
+        int tamano = Integer.parseInt(JOptionPane.showInputDialog("Dijite el tamaño de las casillas: "));
+        this.setTamanoCasilla(tamano);
+    }//GEN-LAST:event_btnTamanoActionPerformed
+
+    private void btnMargenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMargenActionPerformed
+        int margen = Integer.parseInt(JOptionPane.showInputDialog("Dijite el tamaño de las casillas: "));
+        this.setMargenCasillas(margen);
+    }//GEN-LAST:event_btnMargenActionPerformed
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -242,10 +277,13 @@ public class FrmJuego extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnExperto;
     private javax.swing.JMenuItem btnIntermedio;
-    private javax.swing.JMenu btnNuevoJuego;
+    private javax.swing.JMenuItem btnMargen;
     private javax.swing.JMenuItem btnPersonalizado;
     private javax.swing.JMenuItem btnPrincipiante;
+    private javax.swing.JMenuItem btnTamano;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu menuConfiguracion;
+    private javax.swing.JMenu menuNuevoJuego;
     // End of variables declaration//GEN-END:variables
 
     private void setNumFilas(int numFilas) {
@@ -258,5 +296,13 @@ public class FrmJuego extends javax.swing.JFrame {
 
     private void setNumMinas(int numMinas) {
         this.numMinas = numMinas;
+    }
+
+    public void setTamanoCasilla(int tamanoCasilla) {
+        this.tamanoCasilla = tamanoCasilla;
+    }
+
+    public void setMargenCasillas(int margenCasillas) {
+        this.margenCasillas = margenCasillas;
     }
 }

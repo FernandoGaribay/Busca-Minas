@@ -1,6 +1,5 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -11,9 +10,7 @@ public class TableroBuscaminas {
     private int numFilas;
     private int numColumnas;
     private int numMinas;
-    
     private int numCasillasAbiertas;
-    private boolean juegoTerminado;
     
     private Consumer<List<Casilla>> eventoPartidaPerdida;
     private Consumer<List<Casilla>> eventoPartidaGanada;

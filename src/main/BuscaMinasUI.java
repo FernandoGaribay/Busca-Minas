@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,6 +19,7 @@ public class BuscaMinasUI extends javax.swing.JFrame {
 
     public BuscaMinasUI() {
         initComponents();
+        setIcono();
         nuevoJuego();
     }
 
@@ -142,7 +144,9 @@ public class BuscaMinasUI extends javax.swing.JFrame {
         btnTamano = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Busca Minas - 21310414");
         setBackground(new java.awt.Color(255, 255, 255));
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlContenedor.setBackground(new java.awt.Color(74, 117, 44));
@@ -331,5 +335,9 @@ public class BuscaMinasUI extends javax.swing.JFrame {
 
     public void setTamanoCasilla(int tamanoCasilla) {
         this.tamanoCasilla = tamanoCasilla;
+    }
+
+    private void setIcono() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/bomba.png")));
     }
 }

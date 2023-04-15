@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -18,13 +20,14 @@ public class FrmJuego extends javax.swing.JFrame {
 
     public FrmJuego() {
         initComponents();
+        
     }
 
     private void descargarControles() {
         if (this.casillas != null) {
             for (JButtomCustom[] filas : casillas) {
                 for (JButtomCustom filaColumna : filas) {
-                    this.getContentPane().remove(filaColumna);
+                    pnlContenedor.remove(filaColumna);
                 }
             }
         }
@@ -88,7 +91,7 @@ public class FrmJuego extends javax.swing.JFrame {
                         }
                     }
                 });
-                getContentPane().add(casillas[i][j]);
+                pnlContenedor.add(casillas[i][j]);
             }
         }
         this.tamanoVentana();
@@ -96,8 +99,10 @@ public class FrmJuego extends javax.swing.JFrame {
     
     private void tamanoVentana(){
         int ancho = numColumnas * tamanoCasilla + 37;
-        int alto = numFilas * tamanoCasilla + 82;
+        int alto = numFilas * tamanoCasilla + 142;
         setSize(ancho, alto);
+        pnlContenedor.setPreferredSize(new Dimension(ancho, alto));
+        pnlSuperior.setPreferredSize(new Dimension(ancho, 60));
     }
     
     private int[] obtenerCoordenadas(JButtomCustom boton){
@@ -122,6 +127,8 @@ public class FrmJuego extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlContenedor = new javax.swing.JPanel();
+        pnlSuperior = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuNuevoJuego = new javax.swing.JMenu();
         btnPrincipiante = new javax.swing.JMenuItem();
@@ -133,6 +140,38 @@ public class FrmJuego extends javax.swing.JFrame {
         btnMargen = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        pnlContenedor.setBackground(new java.awt.Color(74, 117, 44));
+
+        javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
+        pnlContenedor.setLayout(pnlContenedorLayout);
+        pnlContenedorLayout.setHorizontalGroup(
+            pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 460, Short.MAX_VALUE)
+        );
+        pnlContenedorLayout.setVerticalGroup(
+            pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 453, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(pnlContenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, -1, -1));
+
+        pnlSuperior.setBackground(new java.awt.Color(74, 117, 44));
+
+        javax.swing.GroupLayout pnlSuperiorLayout = new javax.swing.GroupLayout(pnlSuperior);
+        pnlSuperior.setLayout(pnlSuperiorLayout);
+        pnlSuperiorLayout.setHorizontalGroup(
+            pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 460, Short.MAX_VALUE)
+        );
+        pnlSuperiorLayout.setVerticalGroup(
+            pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(pnlSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         menuNuevoJuego.setText("Nuevo Juego");
 
@@ -191,17 +230,6 @@ public class FrmJuego extends javax.swing.JFrame {
         jMenuBar1.add(menuConfiguracion);
 
         setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 472, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 497, Short.MAX_VALUE)
-        );
 
         pack();
         setLocationRelativeTo(null);
@@ -284,6 +312,8 @@ public class FrmJuego extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuNuevoJuego;
+    private javax.swing.JPanel pnlContenedor;
+    private javax.swing.JPanel pnlSuperior;
     // End of variables declaration//GEN-END:variables
 
     private void setNumFilas(int numFilas) {

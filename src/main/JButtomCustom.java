@@ -80,28 +80,30 @@ public final class JButtomCustom extends JButton {
         switch (estado) {
             case DEFAULT:
                 setIcon(null);
-//                setBackground(new Color(161, 208, 73));
                 setForeground(Color.BLACK);
                 setFont(new Font("Arial", Font.BOLD, 20));
                 setText("");
                 break;
             case BANDERA:
-                
-
-                try {
+                try { 
                     Image imagen = ImageIO.read(getClass().getResource("/imagenes/bandera.png"));
                     ImageIcon icono = new ImageIcon(imagen.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
                     setIcon(icono);
                 } catch (IOException ex) {}
                 break;
             case REVELAR:
+                setIcon(null);
                 setBackground(bgRevelado);
                 setForeground(getNumberColor());
                 setBorderPainted(false);
                 break;
             case BOMBA:
                 setBackground(Color.RED);
-                setText("X");
+                try { 
+                    Image imagen = ImageIO.read(getClass().getResource("/imagenes/bomba.png"));
+                    ImageIcon icono = new ImageIcon(imagen.getScaledInstance(getWidth()-15, getHeight()-15, Image.SCALE_SMOOTH));
+                    setIcon(icono);
+                } catch (IOException ex) {}
         }
         repaint();
     }

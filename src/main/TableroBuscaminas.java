@@ -10,6 +10,7 @@ public class TableroBuscaminas {
     private int numFilas;
     private int numColumnas;
     private int numMinas;
+    private int numBanderas;
     private int numCasillasAbiertas;
     
     private Consumer<List<Casilla>> eventoPartidaPerdida;
@@ -21,6 +22,7 @@ public class TableroBuscaminas {
         this.numFilas = numFilas;
         this.numColumnas = numColumnas;
         this.numMinas = numMinas;
+        this.numBanderas = numMinas;
         this.inicializarCasillas();
     }
 
@@ -114,14 +116,32 @@ public class TableroBuscaminas {
             this.numCasillasAbiertas++;
         }
     }
-    
-    public void marcarCasillaBandera(int posFila, int posColumna){
-        this.eventoMarcarBandera.accept(this.casillas[posFila][posColumna]);
-        if(!this.casillas[posFila][posColumna].isBandera()){
-            this.casillas[posFila][posColumna].setBandera(true);
+
+    public void marcarCasillaBandera(int posFila, int posColumna) {
+//        this.eventoMarcarBandera.accept(this.casillas[posFila][posColumna]);
+//        if(!this.casillas[posFila][posColumna].isBandera()){
+//            this.casillas[posFila][posColumna].setBandera(true);
+//        } else if (this.casillas[posFila][posColumna].isBandera()){
+//            this.casillas[posFila][posColumna].setBandera(false);
+//        }
+
+        if (!this.casillas[posFila][posColumna].isBandera()) {
+            if (this.casillas[posFila][posColumna].isBandera()) {
+                this.casillas[posFila][posColumna].setBandera(false);
+                numBanderas += 1;
+            } else {
+                if (numBanderas > 0) {
+                    this.eventoMarcarBandera.accept(this.casillas[posFila][posColumna]);
+                    this.casillas[posFila][posColumna].setBandera(true);
+                    numBanderas -= 1;
+                }
+            }
         } else {
+            this.eventoMarcarBandera.accept(this.casillas[posFila][posColumna]);
             this.casillas[posFila][posColumna].setBandera(false);
+            numBanderas += 1;
         }
+
     }
     
     public boolean partidaGanada(){
@@ -142,6 +162,14 @@ public class TableroBuscaminas {
     
     public void setEventoPartidaGanada(Consumer<List<Casilla>> eventoPartidaGanada) {
         this.eventoPartidaGanada = eventoPartidaGanada;
+    }
+
+    public int getNumBanderas() {
+        return numBanderas;
+    }
+
+    public void setNumBanderas(int numBanderas) {
+        this.numBanderas = numBanderas;
     }
     
     

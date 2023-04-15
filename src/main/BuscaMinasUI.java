@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -8,19 +7,18 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class FrmJuego extends javax.swing.JFrame {
+public class BuscaMinasUI extends javax.swing.JFrame {
 
-    private int numFilas = 10;
-    private int numColumnas = 10;
-    private int numMinas = 2;
+    private int numFilas = 8;
+    private int numColumnas = 8;
+    private int numMinas = 10;
     private int tamanoCasilla = 40;
-    private int margenCasillas = 5;
     private JButtomCustom[][] casillas;
     private TableroBuscaminas tablero;
 
-    public FrmJuego() {
+    public BuscaMinasUI() {
         initComponents();
-        
+        nuevoJuego();
     }
 
     private void descargarControles() {
@@ -42,6 +40,7 @@ public class FrmJuego extends javax.swing.JFrame {
 
     private void crearTablero() {
         this.tablero = new TableroBuscaminas(numFilas, numColumnas, numMinas);
+        lblnumBanderas.setText(tablero.getNumBanderas() + "");
         
         this.tablero.setEventoPartidaPerdida((List<Casilla> t) -> {
             for (Casilla casillaConMina : t) {
@@ -59,9 +58,9 @@ public class FrmJuego extends javax.swing.JFrame {
                 casillas[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].setText(":)");
             }
         });
-        
+
         tablero.setEventoMarcarBandera((Casilla t) -> {
-            if(!t.isBandera()){
+            if (!t.isBandera()) {
                 casillas[t.getPosFila()][t.getPosColumna()].bandera();
             } else {
                 casillas[t.getPosFila()][t.getPosColumna()].normal();
@@ -79,7 +78,7 @@ public class FrmJuego extends javax.swing.JFrame {
                 casillas[i][j] = new JButtomCustom(esOscuro);
                 casillas[i][j].setName(i + "," + j);
                 casillas[i][j].setBounds(10 + j * tamanoCasilla, 10 + i * tamanoCasilla, tamanoCasilla, tamanoCasilla);
-
+                
                 casillas[i][j].addActionListener((ActionEvent e) -> {
                     btnClickIzquierdo((JButtomCustom) e.getSource());
                 });
@@ -121,6 +120,7 @@ public class FrmJuego extends javax.swing.JFrame {
     private void btnClickDerecho(JButtomCustom e) {
         int coordenadas[] = obtenerCoordenadas(e);
         tablero.marcarCasillaBandera(coordenadas[0], coordenadas[1]);
+        lblnumBanderas.setText(tablero.getNumBanderas() + "");
     }
 
     @SuppressWarnings("unchecked")
@@ -129,6 +129,9 @@ public class FrmJuego extends javax.swing.JFrame {
 
         pnlContenedor = new javax.swing.JPanel();
         pnlSuperior = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        lblnumBanderas = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuNuevoJuego = new javax.swing.JMenu();
         btnPrincipiante = new javax.swing.JMenuItem();
@@ -137,19 +140,19 @@ public class FrmJuego extends javax.swing.JFrame {
         btnPersonalizado = new javax.swing.JMenuItem();
         menuConfiguracion = new javax.swing.JMenu();
         btnTamano = new javax.swing.JMenuItem();
-        btnMargen = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pnlContenedor.setBackground(new java.awt.Color(74, 117, 44));
+        pnlContenedor.setPreferredSize(new java.awt.Dimension(461, 453));
 
         javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
         pnlContenedor.setLayout(pnlContenedorLayout);
         pnlContenedorLayout.setHorizontalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
+            .addGap(0, 461, Short.MAX_VALUE)
         );
         pnlContenedorLayout.setVerticalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,19 +162,24 @@ public class FrmJuego extends javax.swing.JFrame {
         getContentPane().add(pnlContenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, -1, -1));
 
         pnlSuperior.setBackground(new java.awt.Color(74, 117, 44));
+        pnlSuperior.setMinimumSize(new java.awt.Dimension(460, 60));
+        pnlSuperior.setPreferredSize(new java.awt.Dimension(461, 60));
+        pnlSuperior.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout pnlSuperiorLayout = new javax.swing.GroupLayout(pnlSuperior);
-        pnlSuperior.setLayout(pnlSuperiorLayout);
-        pnlSuperiorLayout.setHorizontalGroup(
-            pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
-        );
-        pnlSuperiorLayout.setVerticalGroup(
-            pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 60, Short.MAX_VALUE)
-        );
+        jPanel1.setBackground(new java.awt.Color(74, 117, 44));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        getContentPane().add(pnlSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/contBanderas.png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        lblnumBanderas.setFont(new java.awt.Font("Century Gothic", 0, 30)); // NOI18N
+        lblnumBanderas.setForeground(new java.awt.Color(255, 255, 255));
+        lblnumBanderas.setText("30");
+        jPanel1.add(lblnumBanderas, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 80, 40));
+
+        pnlSuperior.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 160, 40));
+
+        getContentPane().add(pnlSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 60));
 
         menuNuevoJuego.setText("Nuevo Juego");
 
@@ -219,14 +227,6 @@ public class FrmJuego extends javax.swing.JFrame {
         });
         menuConfiguracion.add(btnTamano);
 
-        btnMargen.setText("Marden de las casillas");
-        btnMargen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMargenActionPerformed(evt);
-            }
-        });
-        menuConfiguracion.add(btnMargen);
-
         jMenuBar1.add(menuConfiguracion);
 
         setJMenuBar(jMenuBar1);
@@ -272,11 +272,6 @@ public class FrmJuego extends javax.swing.JFrame {
         this.setTamanoCasilla(tamano);
     }//GEN-LAST:event_btnTamanoActionPerformed
 
-    private void btnMargenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMargenActionPerformed
-        int margen = Integer.parseInt(JOptionPane.showInputDialog("Dijite el tamaño de las casillas: "));
-        this.setMargenCasillas(margen);
-    }//GEN-LAST:event_btnMargenActionPerformed
-
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -286,18 +281,18 @@ public class FrmJuego extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaMinasUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaMinasUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaMinasUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BuscaMinasUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmJuego().setVisible(true);
+                new BuscaMinasUI().setVisible(true);
             }
         });
     }
@@ -305,11 +300,13 @@ public class FrmJuego extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnExperto;
     private javax.swing.JMenuItem btnIntermedio;
-    private javax.swing.JMenuItem btnMargen;
     private javax.swing.JMenuItem btnPersonalizado;
     private javax.swing.JMenuItem btnPrincipiante;
     private javax.swing.JMenuItem btnTamano;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblnumBanderas;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuNuevoJuego;
     private javax.swing.JPanel pnlContenedor;
@@ -328,11 +325,11 @@ public class FrmJuego extends javax.swing.JFrame {
         this.numMinas = numMinas;
     }
 
-    public void setTamanoCasilla(int tamanoCasilla) {
-        this.tamanoCasilla = tamanoCasilla;
+    private int getNumMinas() {
+        return numMinas;
     }
 
-    public void setMargenCasillas(int margenCasillas) {
-        this.margenCasillas = margenCasillas;
+    public void setTamanoCasilla(int tamanoCasilla) {
+        this.tamanoCasilla = tamanoCasilla;
     }
 }

@@ -85,6 +85,7 @@ public final class JButtomCustom extends JButton {
                 setText("");
                 break;
             case BANDERA:
+                setBackground(bgDefault);
                 try { 
                     Image imagen = ImageIO.read(getClass().getResource("/imagenes/bandera.png"));
                     ImageIcon icono = new ImageIcon(imagen.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));

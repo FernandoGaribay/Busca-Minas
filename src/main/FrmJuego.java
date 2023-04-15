@@ -11,7 +11,7 @@ public class FrmJuego extends javax.swing.JFrame {
     private int numFilas = 10;
     private int numColumnas = 10;
     private int numMinas = 2;
-    private int tamanoCasilla = 30;
+    private int tamanoCasilla = 40;
     private int margenCasillas = 5;
     private JButtomCustom[][] casillas;
     private TableroBuscaminas tablero;
@@ -72,10 +72,11 @@ public class FrmJuego extends javax.swing.JFrame {
         this.casillas = new JButtomCustom[this.numFilas][this.numColumnas];
         for (int i = 0; i < casillas.length; i++) {
             for (int j = 0; j < casillas[i].length; j++) {
-                casillas[i][j] = new JButtomCustom();
+                boolean esOscuro = (i + j) % 2 == 0;
+                casillas[i][j] = new JButtomCustom(esOscuro);
                 casillas[i][j].setName(i + "," + j);
-                casillas[i][j].setBounds(j * (tamanoCasilla + margenCasillas) + margenCasillas, i * (tamanoCasilla + margenCasillas) + margenCasillas, tamanoCasilla, tamanoCasilla); // Establecer la posicion y el tamaño del boton
-                
+                casillas[i][j].setBounds(10 + j * tamanoCasilla, 10 + i * tamanoCasilla, tamanoCasilla, tamanoCasilla);
+
                 casillas[i][j].addActionListener((ActionEvent e) -> {
                     btnClickIzquierdo((JButtomCustom) e.getSource());
                 });
@@ -94,8 +95,8 @@ public class FrmJuego extends javax.swing.JFrame {
     }
     
     private void tamanoVentana(){
-        int ancho = numColumnas * (tamanoCasilla + margenCasillas) + 16 + margenCasillas;
-        int alto = numFilas * (tamanoCasilla + margenCasillas) + 60 + margenCasillas;
+        int ancho = numColumnas * tamanoCasilla + 37;
+        int alto = numFilas * tamanoCasilla + 82;
         setSize(ancho, alto);
     }
     
@@ -132,7 +133,6 @@ public class FrmJuego extends javax.swing.JFrame {
         btnMargen = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
 
         menuNuevoJuego.setText("Nuevo Juego");
 

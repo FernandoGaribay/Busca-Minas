@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class BuscaMinasUI extends javax.swing.JFrame {
@@ -45,6 +47,9 @@ public class BuscaMinasUI extends javax.swing.JFrame {
         lblnumBanderas.setText(tablero.getNumBanderas() + "");
         
         this.tablero.setEventoPartidaPerdida((List<Casilla> t) -> {
+            lblEstado.setText("Perdiste!");
+            lblEstado.setVisible(true);
+            
             for (Casilla casillaConMina : t) {
                 casillas[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].bomba();
             }
@@ -56,8 +61,11 @@ public class BuscaMinasUI extends javax.swing.JFrame {
         });
         
         tablero.setEventoPartidaGanada((List<Casilla> t) -> {
-            for (Casilla casillaConMina : t) {
-                casillas[casillaConMina.getPosFila()][casillaConMina.getPosColumna()].setText(":)");
+            lblEstado.setText("Ganaste!");
+            lblEstado.setVisible(true);
+
+            for (Casilla casillaSinMina : t) {
+                casillas[casillaSinMina.getPosFila()][casillaSinMina.getPosColumna()].victoria();
             }
         });
 
@@ -69,7 +77,7 @@ public class BuscaMinasUI extends javax.swing.JFrame {
             }
         });
         
-        this.tablero.imprimirTablero();
+        tablero.imprimirTablero();
     }
 
     private void cargarControles() {
@@ -104,6 +112,8 @@ public class BuscaMinasUI extends javax.swing.JFrame {
         setSize(ancho, alto);
         pnlContenedor.setPreferredSize(new Dimension(ancho, alto));
         pnlSuperior.setPreferredSize(new Dimension(ancho, 60));
+        lblEstado.setLocation(getWidth() - lblEstado.getWidth() - 25, lblEstado.getY());
+        lblEstado.setVisible(false);
     }
     
     private int[] obtenerCoordenadas(JButtomCustom boton){
@@ -134,6 +144,7 @@ public class BuscaMinasUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         lblnumBanderas = new javax.swing.JLabel();
+        lblEstado = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuNuevoJuego = new javax.swing.JMenu();
         btnPrincipiante = new javax.swing.JMenuItem();
@@ -168,7 +179,7 @@ public class BuscaMinasUI extends javax.swing.JFrame {
         pnlSuperior.setBackground(new java.awt.Color(74, 117, 44));
         pnlSuperior.setMinimumSize(new java.awt.Dimension(460, 60));
         pnlSuperior.setPreferredSize(new java.awt.Dimension(461, 60));
-        pnlSuperior.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlSuperior.setLayout(null);
 
         jPanel1.setBackground(new java.awt.Color(74, 117, 44));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -181,7 +192,15 @@ public class BuscaMinasUI extends javax.swing.JFrame {
         lblnumBanderas.setText("30");
         jPanel1.add(lblnumBanderas, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 80, 40));
 
-        pnlSuperior.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 160, 40));
+        pnlSuperior.add(jPanel1);
+        jPanel1.setBounds(10, 15, 160, 40);
+
+        lblEstado.setFont(new java.awt.Font("Century Gothic", 0, 30)); // NOI18N
+        lblEstado.setForeground(new java.awt.Color(255, 255, 255));
+        lblEstado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblEstado.setText("Ganaste");
+        pnlSuperior.add(lblEstado);
+        lblEstado.setBounds(137, 15, 310, 50);
 
         getContentPane().add(pnlSuperior, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 60));
 
@@ -310,6 +329,7 @@ public class BuscaMinasUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblnumBanderas;
     private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuNuevoJuego;

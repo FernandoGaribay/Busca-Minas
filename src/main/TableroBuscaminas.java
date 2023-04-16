@@ -86,6 +86,18 @@ public class TableroBuscaminas {
         return casillasConMinas;
     }
     
+    private List<Casilla> obtenerCasillasSinMinas() {
+        List<Casilla> casillasConMinas = new LinkedList<>();
+        for (Casilla[] fila : this.casillas) {
+            for (Casilla filaColumna : fila) {
+                if (!filaColumna.isMina()) {
+                    casillasConMinas.add(filaColumna);
+                }
+            }
+        }
+        return casillasConMinas;
+    }
+    
     public void seleccionarCasilla(int posFila, int posColumna){
 
         if (this.casillas[posFila][posColumna].isMina()) {
@@ -106,7 +118,7 @@ public class TableroBuscaminas {
         }
 
         if (this.partidaGanada()) {
-            eventoPartidaGanada.accept(obtenerCasillasConMinas());
+            eventoPartidaGanada.accept(obtenerCasillasSinMinas());
         }
     }
     
@@ -118,13 +130,6 @@ public class TableroBuscaminas {
     }
 
     public void marcarCasillaBandera(int posFila, int posColumna) {
-//        this.eventoMarcarBandera.accept(this.casillas[posFila][posColumna]);
-//        if(!this.casillas[posFila][posColumna].isBandera()){
-//            this.casillas[posFila][posColumna].setBandera(true);
-//        } else if (this.casillas[posFila][posColumna].isBandera()){
-//            this.casillas[posFila][posColumna].setBandera(false);
-//        }
-
         if (!this.casillas[posFila][posColumna].isBandera()) {
             if (this.casillas[posFila][posColumna].isBandera()) {
                 this.casillas[posFila][posColumna].setBandera(false);
@@ -141,7 +146,6 @@ public class TableroBuscaminas {
             this.casillas[posFila][posColumna].setBandera(false);
             numBanderas += 1;
         }
-
     }
     
     public boolean partidaGanada(){
@@ -172,28 +176,10 @@ public class TableroBuscaminas {
         this.numBanderas = numBanderas;
     }
     
-    
-    
-    public static void main(String[] args) {
-        TableroBuscaminas tablero = new TableroBuscaminas(6, 6, 5);
-        tablero.imprimirTablero();
-        System.out.println("---------");
-        tablero.imprimirPistas();
-    }
-
     public void imprimirTablero() {
         for (Casilla[] fila : this.casillas) {
             for (Casilla filaColumna : fila) {
                 System.out.print(filaColumna.isMina() ? "*" : "0");
-            }
-            System.out.println("");
-        }
-    }
-
-    private void imprimirPistas() {
-        for (Casilla[] fila : this.casillas) {
-            for (Casilla filaColumna : fila) {
-                System.out.print(filaColumna.getNumMinasAlrrededor());
             }
             System.out.println("");
         }

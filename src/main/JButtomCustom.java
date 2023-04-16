@@ -14,17 +14,20 @@ public final class JButtomCustom extends JButton {
     private final Color colorHover = new Color(193, 239, 105);
     private final Color bgDefault;
     private final Color bgRevelado;
+    private final Color bgGanado;
     private Estado estado;
 
     public JButtomCustom(boolean esOscuro) {
         if (esOscuro) {
             bgDefault = new Color(205, 235, 145);
             bgRevelado = new Color(228, 193, 158);
-            setBackground(new Color(198, 228, 139));
+            bgGanado = new Color(125, 183, 255);
+            setBackground(bgDefault);
         } else {
             bgDefault = new Color(161, 208, 73);
             bgRevelado = new Color(214, 183, 152);
-            setBackground(new Color(161, 208, 73));
+            bgGanado = new Color(141, 199, 248);
+            setBackground(bgDefault);
         }
 
         this.setFocusable(false);
@@ -68,7 +71,7 @@ public final class JButtomCustom extends JButton {
     }
 
     private void cambiarEstado(Estado nuevoEstado) {
-        if (estado == Estado.REVELAR) {
+        if (estado == Estado.REVELAR && nuevoEstado != Estado.VICTORIA) {
             return; 
         }
         estado = nuevoEstado;
@@ -105,6 +108,12 @@ public final class JButtomCustom extends JButton {
                     ImageIcon icono = new ImageIcon(imagen.getScaledInstance(getWidth()-15, getHeight()-15, Image.SCALE_SMOOTH));
                     setIcon(icono);
                 } catch (IOException ex) {}
+                break;
+            case VICTORIA:
+                setIcon(null);
+                setBackground(bgGanado);
+                setText("");
+                break;
         }
         repaint();
     }
@@ -124,12 +133,17 @@ public final class JButtomCustom extends JButton {
     public void bomba(){
         cambiarEstado(Estado.BOMBA);
     }
+
+    public void victoria() {
+        cambiarEstado(Estado.VICTORIA);
+    }
         
     private enum Estado {
         DEFAULT,
         BANDERA,
         REVELAR,
-        BOMBA
+        BOMBA,
+        VICTORIA
     }
 
     private Color getNumberColor() {
